@@ -1,0 +1,36 @@
+# requirements.txt
+
+# core numerical & data
+numpy
+pandas
+
+# plotting
+matplotlib
+
+# GIS / raster / vector
+rasterio
+rioxarray
+shapely
+geopandas
+pyproj
+
+# spatial analysis & statistics
+scipy
+numba
+scikit-learn
+libpysal
+esda
+splot
+
+# colormaps (for custom palettes)
+colormaps
+
+# annotation helpers
+adjustText
+
+# HTTP requests
+requests
+
+# interactive mapping (optional)
+ipyleaflet
+ipywidgets
