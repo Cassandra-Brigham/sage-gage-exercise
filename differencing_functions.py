@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 # Standard library
-import json
 import os
 import re
-import tempfile
-import subprocess
+import json
 import time
 import uuid
+import tempfile
 import warnings
 from pathlib import Path
 from dataclasses import dataclass
@@ -17,35 +16,17 @@ from typing import Any, Dict, List, Optional, Tuple
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib.colors import Normalize
 import requests
 import rasterio
 import rioxarray as rio
-from rasterio.warp import Resampling
 from osgeo import gdal
 import geopandas as gpd
-from shapely.geometry import Polygon, LineString, MultiPolygon, shape, box, mapping
+from shapely.geometry import shape, box, mapping
 from shapely.ops import unary_union, transform
-from scipy import stats
-from scipy.stats import norm
-from scipy.optimize import curve_fit
-from numba import njit, prange
 from pyproj import Transformer, CRS
 from pyproj.aoi import AreaOfInterest
 from pyproj.database import query_utm_crs_info
 from ipyleaflet import Map, GeomanDrawControl, GeoJSON, LegendControl, basemaps, ScaleControl
-import colormaps as cmaps
-from adjustText import adjust_text
-from sklearn.utils import resample
-from esda.moran import Moran
-from libpysal.weights import KNN
-from splot.esda import moran_scatterplot
-
-import numpy as np
-import rasterio
-import rioxarray as rio
-import matplotlib.pyplot as plt
-from matplotlib.colors import Normalize
 
 # Optional PDAL
 try:
@@ -60,7 +41,6 @@ gdal.UseExceptions()
 # ----------------------------------------------------------------------
 # Raster helpers
 # ----------------------------------------------------------------------
-
 @dataclass
 class Raster:
     """Lazy wrapper around a raster file with convenience plotting."""
@@ -886,27 +866,9 @@ class GetDEMs:
     #     self.raster_pair_topo_diff_dtm = RasterPair(raster1 = self.compare_dtm_path, raster2 = self.reference_dtm_path)
     #     self.raster_pair_topo_diff_dsm = RasterPair(raster1 = self.compare_dsm_path, raster2 = self.reference_dsm_path)
 
-"""Geoid-handling utilities – cross‑platform version
-=================================================
-
-This module equips the Topographic Processing Toolkit with **automatic
-vertical geoid alignment**.  It resolves, downloads, and applies the correct
-geoid grid for *any* model available on `https://cdn.proj.org`, not just the
-U.S. NOAA set.
-
-Key improvements (v3)
---------------------
-* **Robust CDN index fetch** – gracefully handles network / JSON errors and
-  falls back to direct `token.tif` probes when `index.json` is unavailable.
-* Explicit **`requests.head` existence check** so we know a TIFF really
-  exists before returning its URL.
-* Tidier exception messages that bubble up the root cause for easier
-  debugging in notebooks.
-
-"""
-
-
-
+# ----------------------------------------------------------------------
+# Managing geoids
+# ----------------------------------------------------------------------
 __all__ = ["GeoidTransformer"]
 
 # ----------------------------------------------------------------------

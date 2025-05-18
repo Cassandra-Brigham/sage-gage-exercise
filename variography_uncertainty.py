@@ -1,19 +1,13 @@
+import math
+from typing import Sequence, Optional, Dict, Any
 import numpy as np
 import pandas as pd
-import math
-import random
 import matplotlib.pyplot as plt
 from scipy import stats
-from scipy.stats import norm
 from scipy.optimize import curve_fit
-from scipy.interpolate import interp1d
 import rasterio
-from rasterio import plot as rio_plot
 import rioxarray as rio
 from numba import njit, prange
-import os
-from numpy.fft import fft2, ifft2
-from rasterio.warp import reproject, Resampling
 
 
 def dropna(array):
@@ -218,7 +212,6 @@ class RasterDataHandler:
             self.samples = filtered_samples
             self.coords = filtered_coords
 
-
 class StatisticalAnalysis:
     """
     A class to perform statistical analysis on data, including plotting data statistics
@@ -358,7 +351,6 @@ class StatisticalAnalysis:
             bootstrap_medians[i] = np.median(sample)
 
         return np.std(bootstrap_medians)
-
 
 class VariogramAnalysis:
     """
@@ -735,29 +727,6 @@ class VariogramAnalysis:
         self.sigma_variogram= sigma_variogram
         self.lags           = lags
         self.n_bins         = n_bins
-        
-        # # Calculate mean and std dev of variograms across all runs
-        # mean_variogram = dropna(np.nanmean(all_variograms, axis=0))
-        # mean_count = dropna(np.nanmean(counts, axis=0))
-        # mean_n_bins = int(dropna(np.nanmean(all_n_bins)))
-        # sigma_variogram = dropna(np.nanstd(all_variograms, axis=0))
-        # sigma_filtered = sigma_variogram
-        # sigma_filtered[sigma_filtered==0] = np.finfo(float).eps
-        # CI_95 = np.percentile(all_variograms, [2.5, 97.5], axis=0)
-        # lower_bound = dropna(CI_95[0])  # 2.5th percentile
-        # upper_bound = dropna(CI_95[1])  # 97.5th percentile
-        # err_variogram = dropna(upper_bound - lower_bound)
-        # err_variogram = err_variogram / 2  # Convert to half-width of 95% CI
-        # lags = np.linspace(bin_width / 2, (len(mean_variogram))*bin_width - bin_width / 2, len(mean_variogram))
-        
-        # self.all_variograms = all_variograms
-        # self.all_counts = counts
-        # self.mean_variogram = mean_variogram
-        # self.err_variogram = err_variogram
-        # self.mean_count = mean_count
-        # self.lags = lags
-        # self.n_bins = mean_n_bins
-        # self.sigma_variogram = sigma_filtered
     
     @staticmethod
     def get_base_initial_guess(n, mean_variogram, lags, nugget=False):
@@ -1427,7 +1396,6 @@ class VariogramAnalysis:
 
         return fig
 
-
 class UncertaintyCalculation:
     """
     A class designed to calculate various types of uncertainty associated with spatial data,
@@ -1679,11 +1647,6 @@ class UncertaintyCalculation:
             self.total_mean_uncertainty_max = np.sqrt(np.square(self.mean_random_uncorrelated) + np.square(self.mean_random_correlated_1_max) + np.square(self.mean_random_correlated_2_max))
         elif len(self.variogram_analysis.ranges) ==3:
             self.total_mean_uncertainty_max = np.sqrt(np.square(self.mean_random_uncorrelated) + np.square(self.mean_random_correlated_1_max) + np.square(self.mean_random_correlated_2_max) + np.square(self.mean_random_correlated_3_max))
-
-import math
-import numpy as np
-import rasterio
-from typing import Sequence, Optional, Dict, Any
 
 class ApplyUncertainty:
     """

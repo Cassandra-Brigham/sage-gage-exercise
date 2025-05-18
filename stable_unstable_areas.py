@@ -1,19 +1,19 @@
 from pathlib import Path
+import statistics
 import numpy as np
+import pandas as pd
 import rasterio
+from rasterio.features import rasterize
 import geopandas as gpd
-from shapely.geometry import shape, Polygon, mapping
+from shapely.geometry import shape, mapping, Polygon
 from shapely.ops import transform as shapely_transform
 from pyproj import Transformer
-import rioxarray as rio
 import matplotlib.pyplot as plt
-from matplotlib.colors import Normalize
 from ipyleaflet import Map, DrawControl, ImageOverlay, GeoJSON, LegendControl, WidgetControl
 from ipywidgets import Button, HBox, Label
-from adjustText import adjust_text
+from scipy import stats
 
-from topographic_processing18 import Raster
-from topographic_processing18 import TopoDifferencer
+from differencing_functions import Raster
 
 class TopoMapInteractor:
     """
@@ -188,17 +188,6 @@ class TopoMapInteractor:
         gdf_unstable = gdf_unstable.to_crs(raster_crs)
         return gdf_stable, gdf_unstable
 
-import os
-from pathlib import Path
-import numpy as np
-import pandas as pd
-import rasterio
-from rasterio.features import rasterize
-from rasterio.mask import mask as rio_mask
-import statistics
-from scipy import stats
-
-
 def descriptive_stats(values: np.ndarray) -> pd.DataFrame:
     """
     Compute descriptive statistics for a 1D array of values.
@@ -236,7 +225,6 @@ def descriptive_stats(values: np.ndarray) -> pd.DataFrame:
         '0.5_percentile': p1,
         '99.5_percentile': p99
     }])
-
 
 class StableAreaRasterizer:
     """
@@ -302,7 +290,6 @@ class StableAreaRasterizer:
                     dst.write(out, 1)
                 paths[idx] = path
         return paths
-
 
 class StableAreaAnalyzer:
     """
